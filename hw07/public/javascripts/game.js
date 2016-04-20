@@ -84,6 +84,10 @@ function game(){
   var errorButton = document.querySelector('.closeButton');
   errorButton.addEventListener('click', function(){
     document.querySelector('#error-message').style.visibility = "hidden";
+    document.body.classList.toggle("error");
+    var modalDiv = document.querySelector('.modal');
+    var paragraph = modalDiv.childNodes[1];
+    paragraph.removeChild(paragraph.firstChild);
   });
 
   //DICE
@@ -107,10 +111,17 @@ function game(){
             dieValues[i] = -1;
           }
         }else{ //error message
+
+          //CSS
+          document.body.classList.toggle("error");
           document.querySelector('#error-message').style.visibility = "visible";
+
+          //get error-message div and write error
           var modalDiv = document.querySelector('.modal');
           var paragraph = modalDiv.childNodes[1];
-          paragraph.appendChild(document.createTextNode("You have to roll the die first! Try pressing the Roll button."));
+          if(paragraph.childNodes.length === 0){
+            paragraph.appendChild(document.createTextNode("You have to roll the die first!"));
+          }
         }
       });
     }()); // immediate invocation
@@ -141,10 +152,16 @@ function game(){
   pinButton.addEventListener('click', function(){
     //error handling
     if(pinnedCount === 0){
+      //CSS
+      document.body.classList.toggle("error");
       document.querySelector('#error-message').style.visibility = "visible";
+
+      //get error-message div and create message
       var modalDiv = document.querySelector('.modal');
       var paragraph = modalDiv.childNodes[1];
-      paragraph.appendChild(document.createTextNode("You have to pin a die first! Select a die and press the Pin button."));
+      if(paragraph.childNodes.length === 0){
+        paragraph.appendChild(document.createTextNode("You have to pin a die first!"));
+      }
     }else{
 
       //either pin or clear die
