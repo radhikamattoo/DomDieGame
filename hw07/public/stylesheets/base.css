@@ -4,7 +4,7 @@ body {
   text-align: center;
 }
 .buttons.active{
-  border: solid 2px green;
+  border: solid 4px green;
 }
 .die, .buttons{
   display: inline-block;

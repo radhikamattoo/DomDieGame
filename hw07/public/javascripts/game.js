@@ -215,9 +215,9 @@ function game(){
         rollButton.removeAttribute('disabled');
         rollButton.classList.toggle('active'); //enable roll
         pinButton.classList.toggle('active'); //disable pin
+      }
     }
-  }
-});
+  });
 
 
 }
