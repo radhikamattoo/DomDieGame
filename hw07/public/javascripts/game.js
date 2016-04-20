@@ -10,12 +10,12 @@ var dieValues = [-1,-1,-1,-1, -1];
 var pinnedCount = 0; //reset after every round
 function start(){
     //hide game and error message
-    document.getElementById("error-message").style.visibility = "hidden";
-    document.getElementById("game").style.visibility = "hidden";
+  document.getElementById("error-message").style.visibility = "hidden";
+  document.getElementById("game").style.visibility = "hidden";
 
-    //add event listener to start button to trigger game
-  	var start = document.getElementById("intro").firstChild.nextSibling;
-    start.addEventListener('click', game);
+  //add event listener to start button to trigger game
+	var start = document.getElementById("intro").firstChild.nextSibling;
+  start.addEventListener('click', game);
 };
 
 function game(){
@@ -80,6 +80,12 @@ function game(){
   gameDiv.appendChild(rollButton);
   gameDiv.appendChild(pinButton);
 
+  //set up error div
+  var errorButton = document.querySelector('.closeButton');
+  errorButton.addEventListener('click', function(){
+    document.querySelector('#error-message').style.visibility = "hidden";
+  });
+
   //DICE
   var dies = document.getElementsByClassName("die");
   for(var i = 0; i < dies.length; i++){
@@ -100,6 +106,11 @@ function game(){
             pinnedCount--;
             dieValues[i] = -1;
           }
+        }else{ //error message
+          document.querySelector('#error-message').style.visibility = "visible";
+          var modalDiv = document.querySelector('.modal');
+          var paragraph = modalDiv.childNodes[1];
+          paragraph.appendChild(document.createTextNode("You have to roll the die first! Try pressing the Roll button."));
         }
       });
     }()); // immediate invocation
@@ -130,7 +141,10 @@ function game(){
   pinButton.addEventListener('click', function(){
     //error handling
     if(pinnedCount === 0){
-      alert('nah');
+      document.querySelector('#error-message').style.visibility = "visible";
+      var modalDiv = document.querySelector('.modal');
+      var paragraph = modalDiv.childNodes[1];
+      paragraph.appendChild(document.createTextNode("You have to pin a die first! Select a die and press the Pin button."));
     }else{
 
       //either pin or clear die
@@ -148,21 +162,45 @@ function game(){
       }
 
       //calculate and display user score
-      var scoreString = calculateScore();
+      var scoreArray = calculateScore();
+      var score = scoreArray[0];
+      var scoreString = scoreArray[1];
       var scoreNode = document.getElementById("playerScore").firstChild;
       scoreNode.data = scoreString;
 
-      //enable roll button
-      rollButton.removeAttribute('disabled');
-      rollButton.classList.toggle('active');
-      pinButton.classList.toggle('active');
+      //check if the game's over
+      if(dieValues.indexOf(-1) === -1){ //done with game
+        //disable all pins, figure out result
+        pinButton.setAttribute('disabled', 'disabled');
+        pinButton.classList.toggle('active');
+        var resultNode = document.createElement('p');
+        var result = findWinner(score, compScore);
 
-      if(dieValues.indexOf(-1) === -1){ //done with game?
-        
-      }
-      pinnedCount = 0;
+        //find proper string result and add class for CSS
+        if(result === "win"){
+          result = "You won!";
+          resultNode.classList.add('win');
+        }else if (result === "lose"){
+          result = "You lost!";
+          resultNode.classList.add('lose');
+        }else{
+          result = "Tie!";
+          resultNode.classList.add('tie');
+        }
+
+        //add textnode to playerscore paragraph
+        var subtext = document.createTextNode(result);
+        resultNode.appendChild(subtext);
+        playerParagraph.appendChild(resultNode);
+
+      }else{
+        pinnedCount = 0;
+        rollButton.removeAttribute('disabled');
+        rollButton.classList.toggle('active'); //enable roll
+        pinButton.classList.toggle('active'); //disable pin
     }
-  });
+  }
+});
 
 
 }
@@ -202,8 +240,11 @@ function roll(){
     dieValues[i] = value;
   }
 }
-/*Calculates winner based on scores */
+/*Calculates winner based on scores, returns a string 'tie', 'win', 'lose' */
 function findWinner(player, computer){
+  if(player < computer) return "win";
+  else if (computer < player) return "lose";
+  else return "tie";
 
 }
 /*Calculates user score based on global dieValues array */
@@ -232,5 +273,5 @@ function calculateScore(){
     scoreString += " = " + score;
   }
 
-  return scoreString;
+  return [score, scoreString];
 }
