@@ -3,23 +3,50 @@ body {
   font: 14px "Lucida Grande", Helvetica, Arial, sans-serif;
   text-align: center;
 }
-
+.buttons.active{
+  border: solid 2px green;
+}
 .die, .buttons{
   display: inline-block;
   padding: 20px;
-  border: solid black 0.5px;
+  border: solid 0.5px;
   margin: 20px;
+  vertical-align: top;
+}
+.cleared{
+  padding-bottom: 37px;
+  padding-right: 25px;
 }
 
 .die:hover{
   background-color: #87CEFA;
 }
 
+.tie{
+  color: blue;
+}
+
+.win{
+  color: green;
+}
+
+.lose{
+  color: red;
+}
+
 button{
   background-color: white;
+  border-color: gray;
 }
 
 .pinned{
   background-color: #87CEFA;
   border-color: red;
+}
+
+.overlay{
+  position: fixed;
+  overlay:200;
+  height: 100%;
+  width: 100%;
 }

@@ -5,8 +5,9 @@ Homework 7
 */
 document.addEventListener("DOMContentLoaded", start);
 
-var pinned = [-1,-1,-1,-1,-1];
-var pinnedCount = 0;
+//stores score to calculate user score and display die values
+var dieValues = [-1,-1,-1,-1, -1];
+var pinnedCount = 0; //reset after every round
 function start(){
     //hide game and error message
     document.getElementById("error-message").style.visibility = "hidden";
@@ -35,10 +36,9 @@ function game(){
   var compDisplay = document.createTextNode("Computer Score: " + compString + "\n");
 
   //user score element
-  var score =  0;
   var playerParagraph = document.createElement("p");
   playerParagraph.setAttribute('id', 'playerScore');
-  var scoreDisplay = document.createTextNode("Your Score: " + score);
+  var scoreDisplay = document.createTextNode("Your Score: 0");
 
   compParagraph.appendChild(compDisplay);
   playerParagraph.appendChild(scoreDisplay);
@@ -57,6 +57,7 @@ function game(){
     var text = document.createTextNode(" ");
     ele.appendChild(text);
     ele.setAttribute('class', "die");
+    ele.classList.add('class', "cleared");
     ele.setAttribute('id', i);
     die.appendChild(ele);
   }
@@ -67,7 +68,7 @@ function game(){
   var rollText = document.createTextNode("Roll");
   rollButton.appendChild(rollText);
   rollButton.setAttribute('class', 'buttons');
-
+  rollButton.classList.toggle('active');
 
   var pinButton = document.createElement('button');
   var pinText = document.createTextNode("Pin");
@@ -94,10 +95,10 @@ function game(){
           die.classList.toggle('pinned');
           if(classList.contains('pinned')){
             pinnedCount++;
-            pinned[i] = value;
+            dieValues[i] = value;
           }else{
             pinnedCount--;
-            pinned[i] = -1;
+            dieValues[i] = -1;
           }
         }
       });
@@ -106,25 +107,60 @@ function game(){
 
   //ROLL
   rollButton.addEventListener('click', function(){
-      var rollValues =  roll(pinned);
+      roll();
       //display
-      var die = document.getElementsByClassName("die");
-      for(var i = 0; i < die.length; i++){
-        var dieDOM = die[i];
+      for(var i = 0; i < dies.length; i++){
+        var dieDOM = dies[i];
         var textNode = dieDOM.firstChild;
-        textNode.data = rollValues[i];
+        textNode.data = dieValues[i];
+        if(dieDOM.classList.contains("cleared")){
+          dieDOM.classList.remove("cleared");
+        }
       }
       //now disable roll and enable pin
       rollButton.setAttribute('disabled', 'disabled');
       pinButton.removeAttribute('disabled');
+
+      pinButton.classList.toggle('active');
+      rollButton.classList.toggle('active');
   });
 
 
   //PIN
   pinButton.addEventListener('click', function(){
     //error handling
-    if(pinCount === 0){
-      //TODO
+    if(pinnedCount === 0){
+      alert('nah');
+    }else{
+
+      //either pin or clear die
+      for(var i = 0; i < dies.length; i++){
+        var die = dies[i];
+        //disable all selected die
+        if(die.classList.contains('pinned')){
+            die.setAttribute('disabled', 'disabled');
+        }else{//clear all other die
+          var textNode = die.firstChild;
+          textNode.data = "\n";
+          die.classList.toggle("cleared");
+          dieValues[i] = -1;
+        }
+      }
+
+      //calculate and display user score
+      var scoreString = calculateScore();
+      var scoreNode = document.getElementById("playerScore").firstChild;
+      scoreNode.data = scoreString;
+
+      //enable roll button
+      rollButton.removeAttribute('disabled');
+      rollButton.classList.toggle('active');
+      pinButton.classList.toggle('active');
+
+      if(dieValues.indexOf(-1) === -1){ //done with game?
+        
+      }
+      pinnedCount = 0;
     }
   });
 
@@ -158,17 +194,43 @@ function computerScore(){
 
 }
 
-/*Simulates a die roll based on param, array of die values */
-function roll(pinned){
-  for(var i = 0; i < pinned.length; i++){
-    if(pinned[i] !== -1){continue;}
+/*Simulates a die roll based on global die array, dieValues */
+function roll(){
+  for(var i = 0; i < dieValues.length; i++){
+    if(dieValues[i] !== -1){continue;}
     var value = Math.floor((Math.random() * 6) + 1);
-    pinned[i] = value;
+    dieValues[i] = value;
   }
-  return pinned;
-
 }
 /*Calculates winner based on scores */
 function findWinner(player, computer){
 
+}
+/*Calculates user score based on global dieValues array */
+function calculateScore(){
+  var score = 0;
+  var scoreString = "Your Score:";
+  var count = 0;
+
+  for(var i = 0; i < 5; i++){
+    //calculate and display user score
+    if(dieValues[i] === 3){
+      count++;
+      score += 0;
+      scoreString += " 0 (3) +";
+    }
+    else if(dieValues[i] !== -1){
+      count++;
+      score += dieValues[i];
+      scoreString += " " + dieValues[i] + " +";
+    }
+  }
+  if(count === 1){
+    scoreString = "Your Score: " + score;
+  }else{
+    scoreString = scoreString.slice(0, -1);
+    scoreString += " = " + score;
+  }
+
+  return scoreString;
 }
