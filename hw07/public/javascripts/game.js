@@ -16,7 +16,7 @@ function start(){
   //add event listener to start button to trigger game
 	var start = document.getElementById("intro").firstChild.nextSibling;
   start.addEventListener('click', game);
-};
+}
 
 function game(){
   //add all necessary HTML elements to game div
@@ -212,9 +212,12 @@ function game(){
 
       }else{
         pinnedCount = 0;
+        ///now disable pin  and enable roll
+        pinButton.setAttribute('disabled', 'disabled');
         rollButton.removeAttribute('disabled');
-        rollButton.classList.toggle('active'); //enable roll
-        pinButton.classList.toggle('active'); //disable pin
+
+        pinButton.classList.toggle('active');
+        rollButton.classList.toggle('active');
       }
     }
   });

@@ -62,7 +62,8 @@ button{
   left: 50%;
   margin-top: -100px;
   margin-left: -150px;
-  background-color: #f1c40f;
+  background-color: maroon;
+  color: white;
   border-radius: 5px;
   text-align: center;
   z-index: 11; /* 1px higher than the overlay layer */
