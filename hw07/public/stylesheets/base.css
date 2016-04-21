@@ -3,6 +3,11 @@ body {
   font: 14px "Lucida Grande", Helvetica, Arial, sans-serif;
   text-align: center;
 }
+button{
+  background-color: white;
+  border-color: gray;
+}
+
 .buttons.active{
   border: solid 4px green;
 }
@@ -13,6 +18,11 @@ body {
   margin: 20px;
   vertical-align: top;
 }
+
+.hidden{
+  visibility: hidden;
+}
+
 .cleared{
   padding-bottom: 37px;
   padding-right: 25px;
@@ -20,23 +30,6 @@ body {
 
 .die:hover{
   background-color: #87CEFA;
-}
-
-.tie{
-  color: blue;
-}
-
-.win{
-  color: green;
-}
-
-.lose{
-  color: red;
-}
-
-button{
-  background-color: white;
-  border-color: gray;
 }
 
 .pinned{
@@ -67,4 +60,15 @@ button{
   border-radius: 5px;
   text-align: center;
   z-index: 11; /* 1px higher than the overlay layer */
+}
+.tie{
+  color: blue;
+}
+
+.win{
+  color: green;
+}
+
+.lose{
+  color: red;
 }

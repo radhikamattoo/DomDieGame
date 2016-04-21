@@ -10,8 +10,8 @@ var dieValues = [-1,-1,-1,-1, -1];
 var pinnedCount = 0; //reset after every round
 function start(){
     //hide game and error message
-  document.getElementById("error-message").style.visibility = "hidden";
-  document.getElementById("game").style.visibility = "hidden";
+  document.getElementById("error-message").classList.add("hidden");
+  document.getElementById("game").classList.add("hidden");
 
   //add event listener to start button to trigger game
 	var start = document.getElementById("intro").firstChild.nextSibling;
@@ -22,8 +22,8 @@ function game(){
   //add all necessary HTML elements to game div
 
   //hide start button and show game div
-  document.getElementById("intro").style.visibility = "hidden";
-  document.getElementById("game").style.visibility = "visible";
+  document.getElementById("intro").classList.add("hidden");
+  document.getElementById("game").classList.remove("hidden");
 
   //simulate computer's turn
   var compGame = computerScore();
@@ -83,7 +83,7 @@ function game(){
   //set up error div
   var errorButton = document.querySelector('.closeButton');
   errorButton.addEventListener('click', function(){
-    document.querySelector('#error-message').style.visibility = "hidden";
+    document.querySelector('#error-message').classList.add("hidden");
     document.body.classList.toggle("error");
     var modalDiv = document.querySelector('.modal');
     var paragraph = modalDiv.childNodes[1];
@@ -114,7 +114,7 @@ function game(){
 
           //CSS
           document.body.classList.toggle("error");
-          document.querySelector('#error-message').style.visibility = "visible";
+          document.querySelector('#error-message').classList.remove("hidden");
 
           //get error-message div and write error
           var modalDiv = document.querySelector('.modal');
@@ -154,7 +154,7 @@ function game(){
     if(pinnedCount === 0){
       //CSS
       document.body.classList.toggle("error");
-      document.querySelector('#error-message').style.visibility = "visible";
+      document.querySelector('#error-message').classList.remove("hidden");
 
       //get error-message div and create message
       var modalDiv = document.querySelector('.modal');
