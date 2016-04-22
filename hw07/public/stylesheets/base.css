@@ -72,3 +72,6 @@ button{
 .lose{
   color: red;
 }
+.saved{
+  pointer-events: none;
+}

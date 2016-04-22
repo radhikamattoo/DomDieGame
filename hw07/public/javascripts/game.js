@@ -151,7 +151,7 @@ function game(){
   //PIN
   pinButton.addEventListener('click', function(){
     //error handling
-    if(pinnedCount === 0){
+    if(pinnedCount < 1){
       //CSS
       document.body.classList.toggle("error");
       document.querySelector('#error-message').classList.remove("hidden");
@@ -170,6 +170,7 @@ function game(){
         //disable all selected die
         if(die.classList.contains('pinned')){
             die.setAttribute('disabled', 'disabled');
+            die.classList.add('saved');
         }else{//clear all other die
           var textNode = die.firstChild;
           textNode.data = "\n";
